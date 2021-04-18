@@ -10,12 +10,12 @@ app = FastAPI()
 
 @app.get("/auth")
 def root(password: str, password_hash: str, response: Response):
-    if password_hash == hashlib.sha512(password.encode()).hexdigest():
+    normal_to_hashed = hashlib.sha512(password.encode()).hexdigest()
+    response.status_code = status.HTTP_401_UNAUTHORIZED
+    if password_hash == normal_to_hashed:
         response.status_code = status.HTTP_204_NO_CONTENT
-        return None
-    else:
-        response.status_code = status.HTTP_401_UNAUTHORIZED
-        return None
+
+    return response
 
 
 if __name__ == "__main__":
