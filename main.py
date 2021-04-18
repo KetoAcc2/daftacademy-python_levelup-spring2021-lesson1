@@ -6,7 +6,7 @@ app = FastAPI()
 
 @app.get("/")
 def read_main():
-    return {"message": "Hello World"}
+    return {'message': 'Hello world!'}
 
 
 if __name__ == "__main__":
