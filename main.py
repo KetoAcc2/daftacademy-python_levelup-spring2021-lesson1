@@ -37,8 +37,7 @@ def validate_password(request: Request, response: Response):
             response.status_code = status.HTTP_401_UNAUTHORIZED
 
     else:
-        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-
+        response.status_code = status.HTTP_401_UNAUTHORIZED
     return response
 
 
