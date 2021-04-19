@@ -14,14 +14,14 @@ def validate_password(request: Request, response: Response):
     if len(params) == 2:
         password = params[0]
         password_hash = params[1]
-        normal_to_hashed = hashlib.sha512(password.encode()).hexdigest()
-        if password_hash == normal_to_hashed:
-            response.status_code = 204
+        if password is not None and password != '' and password_hash is not None and password_hash != '':
+            normal_to_hashed = hashlib.sha512(password.encode()).hexdigest()
+            if password_hash == normal_to_hashed:
+                response.status_code = 204
+            print(password)
+            print(password_hash)
+            print(normal_to_hashed)
 
-        print(password)
-        print(password_hash)
-        print(normal_to_hashed)
-        
     return response
 
 # params = str(request.query_params).split('&')
@@ -41,6 +41,7 @@ def validate_password(request: Request, response: Response):
     #             password_hash += i
     #         if i == '=':
     #             turner = True
+
 
 if __name__ == '__main__':
     uvicorn.run(app)
