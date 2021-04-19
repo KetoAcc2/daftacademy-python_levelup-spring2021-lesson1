@@ -46,7 +46,7 @@ def get_patient_by_id(patient_id: int, response: Response):
             response.status_code = 404
             return response
 
-    patient = patients[patient_id + 1]
+    patient = patients[patient_id]
     preparedData = {
         "id": patient.patient_id,
         "name": patient.name,
@@ -59,10 +59,8 @@ def get_patient_by_id(patient_id: int, response: Response):
 
 
 counter = ClientIdCounter()
-tmpList = list()
-tmpList.append(Patient(0, '', '', '', ''))
-patients = tmpList
-patients.clear()
+patients = list()
+patients.append(Patient(0, '', '', '', ''))
 
 
 @app.post("/register")
