@@ -1,46 +1,47 @@
+import datetime
+from datetime import datetime as dt
+
 from fastapi import FastAPI, status, Response, Request
 import uvicorn
-import hashlib
+from pydantic import BaseModel
 
 app = FastAPI()
 
 
-@app.get("/auth")
-def validate_password(request: Request, response: Response):
-    print(str(request.query_params))
+class ClientIdCounter:
+    def __init__(self):
+        self.client_id = 0
 
-    params = list(request.query_params.values())
-    response.status_code = 401
-    if len(params) == 2:
-        password = params[0]
-        password_hash = params[1]
-        if password is not None and password != '' and password_hash is not None and password_hash != '':
-            normal_to_hashed = hashlib.sha512(password.encode()).hexdigest()
-            if password_hash == normal_to_hashed:
-                response.status_code = 204
-            print(password)
-            print(password_hash)
-            print(normal_to_hashed)
+    def counter(self):
+        self.client_id += 1
+        return self.client_id
 
-    return response
 
-# params = str(request.query_params).split('&')
-    # if len(params) == 2:
-    #     password = ''
-    #     turner = False
-    #     for i in params[0]:
-    #         if turner:
-    #             password += i
-    #         if i == '=':
-    #             turner = True
-    #
-    #     password_hash = ''
-    #     turner = False
-    #     for i in params[1]:
-    #         if turner:
-    #             password_hash += i
-    #         if i == '=':
-    #             turner = True
+class Data(BaseModel):
+    name: str
+    surname: str
+
+
+counter = ClientIdCounter()
+
+
+@app.post("/register")
+def register_vaccination(data: Data, response: Response):
+    client_id = counter.counter()
+    days_to_add = len(data.name) + len(data.surname)
+    tmpDate = dt.today()
+    registration_date = str(tmpDate.__format__('%Y-%m-%d'))
+    vaccination_date = str((tmpDate + datetime.timedelta(days=days_to_add)).__format__('%Y-%m-%d'))
+
+    print(client_id)
+    print(data.name)
+    print(data.surname)
+    print(registration_date)
+    print(vaccination_date)
+
+    response.status_code = status.HTTP_201_CREATED
+
+    return response.status_code, data
 
 
 if __name__ == '__main__':
