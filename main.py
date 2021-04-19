@@ -9,29 +9,37 @@ app = FastAPI()
 def validate_password(request: Request, response: Response):
     print(str(request.query_params))
 
-    params = str(request.query_params).split('&')
+    # params = str(request.query_params).split('&')
+    # if len(params) == 2:
+    #     password = ''
+    #     turner = False
+    #     for i in params[0]:
+    #         if turner:
+    #             password += i
+    #         if i == '=':
+    #             turner = True
+    #
+    #     password_hash = ''
+    #     turner = False
+    #     for i in params[1]:
+    #         if turner:
+    #             password_hash += i
+    #         if i == '=':
+    #             turner = True
+
+    params = list(request.query_params.values())
     if len(params) == 2:
-        password = ''
-        turner = False
-        for i in params[0]:
-            if turner:
-                password += i
-            if i == '=':
-                turner = True
-
-        password_hash = ''
-        turner = False
-        for i in params[1]:
-            if turner:
-                password_hash += i
-            if i == '=':
-                turner = True
-
+        password = params[0]
+        password_hash = params[1]
         normal_to_hashed = hashlib.sha512(password.encode()).hexdigest()
         if password_hash == normal_to_hashed:
             response.status_code = status.HTTP_204_NO_CONTENT
         else:
             response.status_code = status.HTTP_401_UNAUTHORIZED
+
+        print(password)
+        print(password_hash)
+        print(normal_to_hashed)
 
     else:
         response.status_code = status.HTTP_401_UNAUTHORIZED
