@@ -8,15 +8,6 @@ from pydantic import BaseModel
 app = FastAPI()
 
 
-class ClientIdCounter:
-    def __init__(self):
-        self.client_id = 0
-
-    def counter(self):
-        self.client_id += 1
-        return self.client_id
-
-
 class Data(BaseModel):
     name: str
     surname: str
@@ -58,21 +49,26 @@ def get_patient_by_id(patient_id: int, response: Response):
     return preparedData
 
 
-counter = ClientIdCounter()
+client_id_counter = 0
 patients = list()
 patients.append(Patient(0, '', '', '', ''))
 
 
 @app.post("/register")
 def register_vaccination(data: Data, response: Response):
+    global client_id_counter
     response.status_code = status.HTTP_201_CREATED
     if data.name is None or data.name == '' or\
             data.surname is None or data.surname == '':
         response.status_code = status.HTTP_401_UNAUTHORIZED
         return response
+    
     name = delete_numbers_or_signs(data.name.replace(' ', ''))
     surname = delete_numbers_or_signs(data.surname.replace(' ', ''))
-    client_id = counter.counter()
+    
+    client_id_counter += 1
+    client_id = client_id_counter
+    
     days_to_add = len(name) + len(surname)
     tmpDate = dt.today()
     register_date = str(tmpDate.__format__('%Y-%m-%d'))
