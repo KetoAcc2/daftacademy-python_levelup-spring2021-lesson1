@@ -31,8 +31,9 @@ class Patient:
         self.vaccination_date = vaccination_date
 
 
-@app.get("/patient/{patient_id}")
+@app.get("/patient/{patient_id}", status_code=200)
 def get_patient_by_id(patient_id: int, response: Response):
+    print("patient_id:", patient_id)
     response.status_code = 200
     if patient_id < 1:
         response.status_code = 400
@@ -53,6 +54,7 @@ def get_patient_by_id(patient_id: int, response: Response):
         "register_date": patient.register_date,
         "vaccination_date": patient.vaccination_date
     }
+    print("preparedData:", preparedData)
     return preparedData
 
 
