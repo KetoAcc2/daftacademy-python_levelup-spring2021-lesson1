@@ -30,18 +30,26 @@ def register_vaccination(data: Data, response: Response):
     client_id = counter.counter()
     days_to_add = len(data.name) + len(data.surname)
     tmpDate = dt.today()
-    registration_date = str(tmpDate.__format__('%Y-%m-%d'))
+    register_date = str(tmpDate.__format__('%Y-%m-%d'))
     vaccination_date = str((tmpDate + datetime.timedelta(days=days_to_add)).__format__('%Y-%m-%d'))
 
     print(client_id)
     print(data.name)
     print(data.surname)
-    print(registration_date)
+    print(register_date)
     print(vaccination_date)
 
     response.status_code = status.HTTP_201_CREATED
 
-    return response.status_code, data
+    preparedData = {
+        "id": client_id,
+        "name": data.name,
+        "surname": data.surname,
+        "register_date": register_date,
+        "vaccination_date": vaccination_date
+    }
+
+    return response.status_code, preparedData
 
 
 if __name__ == '__main__':
