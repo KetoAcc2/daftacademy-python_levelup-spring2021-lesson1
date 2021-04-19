@@ -49,7 +49,7 @@ def register_vaccination(data: Data, response: Response):
         "vaccination_date": vaccination_date
     }
 
-    return response.status_code, preparedData
+    return preparedData
 
 
 if __name__ == '__main__':
