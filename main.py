@@ -27,12 +27,9 @@ def validate_password(request: Request, response: Response):
             if i == '=':
                 turner = True
 
-        if password_hash is not None and password is not None and password_hash != '' and password != '':
-            normal_to_hashed = hashlib.sha512(password.encode()).hexdigest()
-            if password_hash == normal_to_hashed:
-                response.status_code = status.HTTP_204_NO_CONTENT
-            else:
-                response.status_code = status.HTTP_401_UNAUTHORIZED
+        normal_to_hashed = hashlib.sha512(password.encode()).hexdigest()
+        if password_hash == normal_to_hashed:
+            response.status_code = status.HTTP_204_NO_CONTENT
         else:
             response.status_code = status.HTTP_401_UNAUTHORIZED
 
